@@ -36,7 +36,7 @@ export default function ForgotPasswordPage() {
   return (
     <Layout title="Forgot Password">
       <div className="auth-form-container border-black border-2 flex flex-col justify-around p-8 w-1/3 max-h-96">
-        <h1 className="text-center font-bold">Login</h1>
+        <h1 className="text-center font-bold">Forgot Password</h1>
         <form
           className="login-form flex flex-col space-y-4"
           onSubmit={handleSubmit}

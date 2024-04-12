@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Spinner = () => {
-  const [count, setCount] = useState(5);
+export const Spinner = ({ path = "login" }) => {
+  const [count, setCount] = useState(3);
   const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCount((prevValue) => --prevValue);
     }, 1000);
-    count === 0 && navigate("/login", { state: location.pathname });
+    count === 0 && navigate(`/${path}`, { state: location.pathname });
     return () => {
       clearInterval(interval);
     };
-  }, [count, navigate]);
+  }, [count, navigate, location, path]);
 
   return (
     <div role="status " className="flex justify-center align-middle my-96">

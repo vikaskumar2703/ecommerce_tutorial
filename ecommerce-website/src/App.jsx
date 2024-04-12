@@ -12,6 +12,8 @@ import { AuthContextProvider } from "./contexts/authContext";
 import DashboardPage from "./pages/DashboardPage";
 import PrivateRoutes from "./routes/PrivateRoutes";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
+import AdminRoutes from "./routes/AdminRoutes";
 
 function App() {
   return (
@@ -22,8 +24,12 @@ function App() {
             <Route exact path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/dashboard" element={<PrivateRoutes />}>
-              <Route path="" element={<DashboardPage />} />
+              <Route path="user" element={<DashboardPage />} />
             </Route>
+            <Route path="/dashboard" element={<AdminRoutes />}>
+              <Route path="admin" element={<AdminDashboardPage />} />
+            </Route>
+
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/cart" element={<CartPage />} />
