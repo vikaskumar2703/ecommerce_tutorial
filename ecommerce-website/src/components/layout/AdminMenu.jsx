@@ -9,25 +9,25 @@ export const AdminMenu = () => {
       <div className="admin-links flex flex-col m-10">
         <NavLink
           className="p-3 border border-collapse font-semibold  hover:bg-gray-300 "
-          to="create-category"
+          to="/dashboard/admin/create-category"
         >
           Create Category
         </NavLink>
         <NavLink
           className="p-3 border border-collapse font-semibold hover:bg-gray-300"
-          to="create-products"
+          to="/dashboard/admin/create-products"
         >
           Create Products
         </NavLink>
         <NavLink
           className="p-3 border border-collapse font-semibold hover:bg-gray-300"
-          to="products"
+          to="/dashboard/admin/products"
         >
           Products
         </NavLink>
         <NavLink
           className="p-3 border border-collapse font-semibold hover:bg-gray-300"
-          to="orders"
+          to="/dashboard/admin/orders"
         >
           Orders
         </NavLink>

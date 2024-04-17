@@ -3,3 +3,4 @@ backend\node_modules
 backend\.env
 ecommerce-website\.env
 ecommerce-website\node_modules
+ecommerce-website/.env
