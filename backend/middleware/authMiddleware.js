@@ -8,9 +8,12 @@ export const validateToken = async (req, res, next) => {
     if (authHeader && authHeader.startsWith("bearer")) {
       token = authHeader.split(" ")[1];
       // console.log(`Token :${token}`);
+    } else {
+      token = authHeader;
     }
     const decodedPayload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     req.user = decodedPayload;
+    //adding decodedPayload of token i.e user information to new property in req and then passing it on to next()
     // console.log(decodedPayload);
     next();
   } catch (error) {
@@ -25,7 +28,7 @@ export const validateToken = async (req, res, next) => {
 
 export const isAdmin = async (req, res, next) => {
   try {
-    console.log(req.user.email);
+    // console.log(req.user.email);
     const user = await User.findOne({
       email: req.user.email,
     });
