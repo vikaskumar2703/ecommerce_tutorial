@@ -4,7 +4,7 @@ export const AdminMenu = () => {
   return (
     <div>
       <h1 className="m-10 font-bold rounded-md p-5 bg-[#0E7490] text-white">
-        Admin Panel
+        <NavLink to="/dashboard/admin">Admin Panel</NavLink>
       </h1>
       <div className="admin-links flex flex-col m-10">
         <NavLink

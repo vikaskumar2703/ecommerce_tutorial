@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./config/dbConnection.js";
-import router from "./routes/authRoute.js";
+import authRoutes from "./routes/authRoute.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 import cors from "cors";
 dotenv.config();
 
@@ -18,7 +19,8 @@ connectDb();
 //rest api
 
 // router middleware
-app.use("/api/auth", router);
+app.use("/api/auth", authRoutes);
+app.use("/api/category", categoryRoutes);
 
 app.get("/", (req, res) => {
   res.send("<h1> Welcome to Ecommerce website</h1>");

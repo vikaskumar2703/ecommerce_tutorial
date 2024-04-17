@@ -16,7 +16,6 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(import.meta.env.VITE_REACT_APP_API);
 
     try {
       const res = await axios.post(
