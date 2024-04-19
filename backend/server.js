@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import connectDb from "./config/dbConnection.js";
 import authRoutes from "./routes/authRoute.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
 import cors from "cors";
 dotenv.config();
 
@@ -21,6 +22,7 @@ connectDb();
 // router middleware
 app.use("/api/auth", authRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/products", productRoutes);
 
 app.get("/", (req, res) => {
   res.send("<h1> Welcome to Ecommerce website</h1>");
