@@ -64,9 +64,9 @@ export const getProductController = async (req, res) => {
 //get single product
 export const getSingleProductController = async (req, res) => {
   try {
-    const products = await Product.find({ slug: req.params.slug })
-      .select("-photo")
-      .populate("category ");
+    const products = await Product.find({ slug: req.params.slug }).select(
+      "-photo"
+    );
 
     res.status(201).send({
       success: true,
