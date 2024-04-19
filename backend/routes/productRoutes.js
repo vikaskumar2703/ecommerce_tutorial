@@ -1,10 +1,15 @@
 import express from "express";
 import { isAdmin, validateToken } from "../middleware/authMiddleware.js";
-import { createProductController } from "../controllers/productController.js";
+import {
+  createProductController,
+  getProductController,
+  getSingleProductController,
+} from "../controllers/productController.js";
 import formidable from "express-formidable";
 
 const router = express.Router();
 
+// create product
 router.post(
   "/create-product",
   validateToken,
@@ -12,6 +17,12 @@ router.post(
   formidable(),
   createProductController
 );
+
+// get all product
+router.get("/get-product", getProductController);
+
+// get all product
+router.get("/get-product/:slug", getSingleProductController);
 
 //   router.put(
 //     "/update-product/:id",
