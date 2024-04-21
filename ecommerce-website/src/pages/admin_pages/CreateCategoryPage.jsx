@@ -3,10 +3,14 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Layout from "../../components/layout/Layout";
+import { Button, Modal } from "antd";
 
 export default function CreateCategoryPage() {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [updatedName, setUpdatedName] = useState("");
+  const [selected, setSelected] = useState({});
 
   const getAllCategories = async () => {
     try {
@@ -39,6 +43,51 @@ export default function CreateCategoryPage() {
       );
       if (res && res.data.success) {
         toast.success(res.data.message);
+        getAllCategories();
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const updateCategory = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(
+        `${import.meta.env.VITE_REACT_APP_API}/api/category/update-category/${
+          selected._id
+        }`,
+        { name: updatedName }
+      );
+      if (res && res.data.success) {
+        const { data } = res;
+        toast.success(data.message);
+        setIsModalOpen(false);
+        setSelected(null);
+        setUpdatedName("");
+        getAllCategories();
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const deleteCategory = async (pid) => {
+    try {
+      const res = await axios.delete(
+        `${
+          import.meta.env.VITE_REACT_APP_API
+        }/api/category/delete-category/${pid}`
+      );
+      if (res && res.data.success) {
+        const { data } = res;
+        toast.success(data.message);
         getAllCategories();
       } else {
         toast.error(res.data.message);
@@ -102,10 +151,22 @@ export default function CreateCategoryPage() {
                       {c.name}
                     </td>
                     <td className="px-6 py-4">
-                      <button className="bg-blue-600 text-white px-2 py-1 rounded mr-2">
+                      <button
+                        className="bg-blue-600 text-white px-2 py-1 rounded mr-2"
+                        onClick={() => {
+                          setIsModalOpen(true);
+                          setUpdatedName(c.name);
+                          setSelected(c);
+                        }}
+                      >
                         Edit
                       </button>
-                      <button className="bg-red-600 text-white px-2 py-1 rounded">
+                      <button
+                        className="bg-red-600 text-white px-2 py-1 rounded"
+                        onClick={() => {
+                          deleteCategory(c._id);
+                        }}
+                      >
                         Delete
                       </button>
                     </td>
@@ -114,6 +175,28 @@ export default function CreateCategoryPage() {
               </tbody>
             </table>
           </div>
+          <Modal
+            open={isModalOpen}
+            footer={null}
+            onCancel={() => setIsModalOpen(false)}
+          >
+            <form onSubmit={updateCategory} className="category-form m-4">
+              <input
+                className="border h-10 m-4 p-2 rounded"
+                value={updatedName}
+                onChange={(e) => {
+                  setUpdatedName(e.target.value);
+                }}
+                id="name"
+              ></input>
+              <button
+                type="submit"
+                className="bg-blue-600 h-10 text-white px-2 py-1 rounded mr-2"
+              >
+                Submit
+              </button>
+            </form>
+          </Modal>
         </div>
       </div>
     </Layout>
