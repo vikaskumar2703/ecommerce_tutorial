@@ -6,6 +6,7 @@ import Layout from "../../components/layout/Layout";
 
 export default function CreateCategoryPage() {
   const [categories, setCategories] = useState([]);
+  const [name, setName] = useState("");
 
   const getAllCategories = async () => {
     try {
@@ -16,6 +17,29 @@ export default function CreateCategoryPage() {
         const { data } = res;
         toast.success(data.message);
         setCategories(data.category);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  //adding category
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_REACT_APP_API}/api/category/create-category`,
+        {
+          name,
+        }
+      );
+      if (res && res.data.success) {
+        toast.success(res.data.message);
+        getAllCategories();
       } else {
         toast.error(res.data.message);
       }
@@ -39,7 +63,23 @@ export default function CreateCategoryPage() {
           <h1 className="text-4xl m-10 font-bold rounded-md underline">
             Manage Category
           </h1>
-
+          <form onSubmit={handleSubmit} className="category-form m-4">
+            <input
+              className="border h-10 m-4 p-2 rounded"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              id="name"
+              placeholder="Enter new category"
+            ></input>
+            <button
+              type="submit"
+              className="bg-blue-600 h-10 text-white px-2 py-1 rounded mr-2"
+            >
+              Submit
+            </button>
+          </form>
           <div className="relative overflow-x-auto">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
