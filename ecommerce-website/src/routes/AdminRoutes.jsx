@@ -13,7 +13,7 @@ export default function AdminRoutes() {
       const res = await axios.get(
         `${import.meta.env.VITE_REACT_APP_API}/api/auth/admin-auth`
       );
-      console.log(res.data);
+
       if (res.data.ok) {
         setOk(true);
       } else {
