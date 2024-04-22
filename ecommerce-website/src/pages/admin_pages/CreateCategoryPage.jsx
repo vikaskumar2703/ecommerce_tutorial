@@ -164,6 +164,7 @@ export default function CreateCategoryPage() {
                       <button
                         className="bg-red-600 text-white px-2 py-1 rounded"
                         onClick={() => {
+                          console.log(c.name);
                           deleteCategory(c._id);
                         }}
                       >
