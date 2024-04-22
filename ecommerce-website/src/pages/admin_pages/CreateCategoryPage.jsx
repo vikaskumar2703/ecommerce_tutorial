@@ -20,6 +20,7 @@ export default function CreateCategoryPage() {
       if (res && res.data.success) {
         const { data } = res;
         toast.success(data.message);
+
         setCategories(data.category);
       } else {
         toast.error(res.data.message);
@@ -43,6 +44,7 @@ export default function CreateCategoryPage() {
       );
       if (res && res.data.success) {
         toast.success(res.data.message);
+        setName("");
         getAllCategories();
       } else {
         toast.error(res.data.message);
