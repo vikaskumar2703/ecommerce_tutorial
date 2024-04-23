@@ -20,6 +20,7 @@ import ProductsPage from "./pages/admin_pages/ProductsPage";
 import OrdersPage from "./pages/admin_pages/OrdersPage";
 import UserProfilePage from "./pages/user_pages/UserProfilePage";
 import UserOrdersPage from "./pages/user_pages/UserOrdersPage";
+import UpdateProductsPage from "./pages/admin_pages/UpdateProductsPage";
 
 function App() {
   return (
@@ -45,6 +46,10 @@ function App() {
                 element={<CreateProductsPage />}
               />
               <Route path="admin/products" element={<ProductsPage />} />
+              <Route
+                path="admin/products/:slug"
+                element={<UpdateProductsPage />}
+              />
               <Route path="admin/orders" element={<OrdersPage />} />
             </Route>
 

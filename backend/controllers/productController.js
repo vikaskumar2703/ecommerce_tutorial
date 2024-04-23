@@ -39,7 +39,7 @@ export const createProductController = async (req, res) => {
   }
 };
 
-//get product
+//get products
 export const getProductController = async (req, res) => {
   try {
     const products = await Product.find({})
@@ -65,15 +65,14 @@ export const getProductController = async (req, res) => {
 //get single product
 export const getSingleProductController = async (req, res) => {
   try {
-    const products = await Product.find({ slug: req.params.slug }).select(
-      "-photo"
-    );
+    const product = await Product.findOne({ slug: req.params.slug })
+      .select("-photo")
+      .populate("category");
 
     res.status(201).send({
       success: true,
       message: "Single Product listed successfully",
-      products,
-      productsCount: products.length,
+      product,
     });
   } catch (error) {
     console.log(error);
