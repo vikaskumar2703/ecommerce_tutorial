@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
 
+  //get all products
   const getAllProducts = async () => {
     try {
       const { data } = await axios.get(

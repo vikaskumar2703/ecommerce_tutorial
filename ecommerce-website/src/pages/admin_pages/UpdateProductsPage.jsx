@@ -86,12 +86,38 @@ export default function CreateProductsPage() {
       );
       if (res && res.data.success) {
         toast.success(res.data.message);
+        navigate("/dashboard/admin/products");
       } else {
         toast.error(res.data.message);
       }
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
+    }
+  };
+
+  //delete product
+  const handleDelete = async () => {
+    try {
+      let answer = window.prompt(
+        "Are you sure you want to delete this product"
+      );
+      if (!answer) return;
+      console.log(id);
+      const { data } = await axios.delete(
+        `${
+          import.meta.env.VITE_REACT_APP_API
+        }/api/products/delete-product/${id}`
+      );
+      if (data.success) {
+        toast.success(data.message);
+        navigate("/dashboard/admin/products");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error in deleting product");
     }
   };
   return (
@@ -111,7 +137,7 @@ export default function CreateProductsPage() {
             <Select
               placeholder="Select a category"
               size="large"
-              value={category.name}
+              value={category}
               showSearch
               onChange={(value) => setCategory(value)}
             >
@@ -198,10 +224,19 @@ export default function CreateProductsPage() {
               <Select.Option value="1">Yes</Select.Option>
               <Select.Option value="0">No</Select.Option>
             </Select>
-            <button type="submit" className="border bg-blue-600 text-white">
+            <button
+              type="submit"
+              className="border rounded bg-blue-600 w-52 py-2 text-white"
+            >
               Update Product
             </button>
-          </form>
+          </form>{" "}
+          <button
+            className="border-2 bg-red-600 rounded w-52 py-2 text-white"
+            onClick={handleDelete}
+          >
+            Delete Product
+          </button>
         </div>
       </div>
     </Layout>
