@@ -3,9 +3,12 @@ import { isAdmin, validateToken } from "../middleware/authMiddleware.js";
 import {
   createProductController,
   deleteProductController,
+  filterProductController,
   getProductController,
   getSingleProductController,
   productPhotoController,
+  searchProductController,
+  similarProductController,
   updateProductController,
 } from "../controllers/productController.js";
 import formidable from "express-formidable";
@@ -24,7 +27,7 @@ router.post(
 // get all product
 router.get("/get-product", getProductController);
 
-// get all product
+// get single product
 router.get("/get-product/:slug", getSingleProductController);
 
 // get product photo
@@ -41,5 +44,13 @@ router.put(
   formidable(),
   updateProductController
 );
+
+router.post("/product-filters", filterProductController);
+
+// search product
+router.get("/search-product/:keyword", searchProductController);
+
+//get similar products
+router.get("/similar-products/:cid/:pid", similarProductController);
 
 export default router;

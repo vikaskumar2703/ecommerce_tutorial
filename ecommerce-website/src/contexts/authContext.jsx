@@ -2,7 +2,7 @@ import { createContext, useEffect } from "react";
 import { useContext, useState } from "react";
 import axios from "axios";
 
-export const AuthContext = createContext("");
+export const AuthContext = createContext();
 // you can provide with default contetxt within create context or explicitly create using "value
 
 export const AuthContextProvider = ({ children }) => {
@@ -28,6 +28,7 @@ export const AuthContextProvider = ({ children }) => {
   );
 };
 
+//function for using created context
 export default function useAuth() {
   return useContext(AuthContext);
 }

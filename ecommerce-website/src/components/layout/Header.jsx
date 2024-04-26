@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 import { Dropdown } from "flowbite-react";
+import { SearchInput } from "../SearchInput.jsx";
 
 export default function Header() {
   const [auth, setAuth] = useAuth();
@@ -19,13 +20,7 @@ export default function Header() {
     <header className="w-screen flex justify-around py-7 bg-slate-300 drop-shadow-md">
       <div className="border-black border">logo</div>
       <div className="search-box">
-        <input
-          type="text"
-          className="rounded-2xl px-2 w-80 py-2"
-          placeholder="Search"
-          // onChange={(e) => setSearch(e.target.value)}
-        />
-        <button type="submit" />
+        <SearchInput />
       </div>
       <div className="navlinks">
         <ul className="flex space-x-10 items-center">

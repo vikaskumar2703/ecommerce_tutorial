@@ -9,7 +9,7 @@ export default function Layout(props) {
         <title>{props.title}</title>
       </Helmet>
       <Header />
-      <div className="Hero min-h-screen flex justify-center items-center">
+      <div className="Hero min-h-screen flex justify-center ">
         {props.children}
       </div>
       <Footer />

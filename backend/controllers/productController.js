@@ -159,3 +159,75 @@ export const updateProductController = async (req, res) => {
     });
   }
 };
+
+// filter products
+export const filterProductController = async (req, res) => {
+  try {
+    const { checked } = req.body;
+    let args = {};
+    if (checked.length) {
+      args.category = checked;
+    }
+    const products = await Product.find(args);
+    res.status(201).send({
+      success: true,
+      message: "Filter products listed successfully",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: " Error in filtering of products",
+      error,
+    });
+  }
+};
+
+//search Product controller
+export const searchProductController = async (req, res) => {
+  try {
+    const { keyword } = req.params;
+    const result = await Product.find({
+      $or: [
+        { name: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
+      ],
+    }).select("-photo");
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: " Error in searching of products",
+      error,
+    });
+  }
+};
+
+// get similar products
+export const similarProductController = async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const products = await Product.find({
+      category: cid,
+      _id: { $ne: pid },
+    })
+      .select("-photo")
+      .limit(3)
+      .populate("category");
+
+    res.status(201).send({
+      success: true,
+      message: "Similar Products listed successfully",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: " Error in filtering of products",
+      error,
+    });
+  }
+};
