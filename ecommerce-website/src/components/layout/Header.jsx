@@ -5,9 +5,12 @@ import { useNavigate } from "react-router-dom";
 
 import { Dropdown } from "flowbite-react";
 import { SearchInput } from "../SearchInput.jsx";
+import useCart from "../../contexts/cartContext.jsx";
 
 export default function Header() {
   const [auth, setAuth] = useAuth();
+  const [cart, setCart] = useCart();
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -16,6 +19,7 @@ export default function Header() {
     toast.success("Logout Successfully");
     navigate("/");
   };
+
   return (
     <header className="w-screen flex justify-around py-7 bg-slate-300 drop-shadow-md">
       <div className="border-black border">logo</div>
@@ -28,7 +32,7 @@ export default function Header() {
             <NavLink to="/">Home</NavLink>
           </li>
           <li>
-            <NavLink to="/cart">Cart</NavLink>
+            <NavLink to="/cart">Cart ({cart.length})</NavLink>
           </li>
           <li>
             <NavLink to="/about">About</NavLink>

@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import useCart from "../contexts/cartContext";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
+  const [cart, setCart] = useCart();
   const navigate = useNavigate();
   //get all products
   const getAllProducts = async () => {
@@ -130,7 +132,17 @@ export default function HomePage() {
                     >
                       More Details
                     </button>
-                    <button className="border bg-blue-600 text-white py-2 px-2 ml-2 rounded">
+                    <button
+                      className="border bg-blue-600 text-white py-2 px-2 ml-2 rounded"
+                      onClick={() => {
+                        setCart([...cart, p]);
+                        localStorage.setItem(
+                          "cart",
+                          JSON.stringify([...cart, p])
+                        );
+                        toast.success("Item added successfully to cart");
+                      }}
+                    >
                       Add to Cart
                     </button>
                   </div>

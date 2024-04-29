@@ -1,6 +1,17 @@
 import Product from "../models/productModel.js";
 import slugify from "slugify";
 import fs from "fs";
+import braintree from "braintree";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment.Sandbox,
+  merchantId: process.env.MERCHANT_ID,
+  publicKey: process.env.PUBLIC_KEY,
+  privateKey: process.env.PRIVATE_KEY,
+});
 
 //create product
 export const createProductController = async (req, res) => {
@@ -227,6 +238,58 @@ export const similarProductController = async (req, res) => {
     return res.status(500).send({
       success: false,
       message: " Error in filtering of products",
+      error,
+    });
+  }
+};
+
+// generate a  braintree client token
+
+export const braintreeTokenController = async (req, res) => {
+  try {
+    gateway.clientToken.generate({}, (err, response) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      res.status(201).send(response.clientToken);
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: " Error in generating transaction token ",
+      error,
+    });
+  }
+};
+
+// make transaction controller
+
+export const braintreePaymentController = async (req, res) => {
+  try {
+    const { cart, nonce } = req.body;
+    let total = 0;
+    cart.map((i) => (total += i.price));
+    let newTransaction = gateway.transaction.sale(
+      {
+        amount: total,
+        paymentMethodNonce: nonce,
+        options: {
+          submitForSettlement: true,
+        },
+      },
+      (err, result) => {
+        if (result) {
+          const cart = new Order();
+          res.json({ ok: true });
+        }
+      }
+    );
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: " Error in checkout ",
       error,
     });
   }
