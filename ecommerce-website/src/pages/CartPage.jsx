@@ -2,10 +2,12 @@ import Layout from "../components/layout/Layout";
 import useCart from "../contexts/cartContext";
 import useAuth from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 export default function CartPage() {
   const [cart, setCart] = useCart();
   const [auth, setAuth] = useAuth();
+  const [clientToken, setClientToken] = useState("");
+  const [instance, setInstance] = useState("");
 
   const navigate = useNavigate();
 
@@ -27,6 +29,27 @@ export default function CartPage() {
   };
 
   let total = getTotal(cart);
+
+  const getToken = async () => {
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_REACT_APP_API}/api/products/client-token`
+      );
+      setClientToken(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getToken();
+  }, [auth?.token]);
+
+  const makeTransaction = async () => {
+    await axios.post(
+      `${import.meta.env.VITE_REACT_APP_API}/api/products/checkout`,
+      { cart,  }
+    );
+  };
   return (
     <Layout title="Cart">
       <div className="grid  grid-cols-4 grid-rows-1 w-full min-h-screen justify-items-center ">
