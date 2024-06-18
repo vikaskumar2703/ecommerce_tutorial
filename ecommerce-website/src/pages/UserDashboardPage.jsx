@@ -18,6 +18,10 @@ export default function UserDashboardPage() {
             <h2 className="text-2xl"> Name : {auth?.user?.name}</h2>
             <h2 className="text-2xl"> Email : {auth?.user?.email}</h2>
             <h2 className="text-2xl"> Phone : {auth?.user?.phone}</h2>
+            <h2 className="text-2xl">
+              {" "}
+              Assigned Mentor : {auth?.user?.mentor}
+            </h2>
           </div>
         </div>
       </div>

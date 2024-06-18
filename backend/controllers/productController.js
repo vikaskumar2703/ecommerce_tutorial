@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const gateway = new braintree.BraintreeGateway({
+var gateway = new braintree.BraintreeGateway({
   environment: braintree.Environment.Sandbox,
   merchantId: process.env.MERCHANT_ID,
   publicKey: process.env.PUBLIC_KEY,
@@ -251,7 +251,7 @@ export const braintreeTokenController = async (req, res) => {
       if (err) {
         res.status(500).send(err);
       }
-      res.status(201).send(response.clientToken);
+      res.status(201).send(response);
     });
   } catch (error) {
     console.log(error);

@@ -2,10 +2,14 @@ import Layout from "../components/layout/Layout";
 import useCart from "../contexts/cartContext";
 import useAuth from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import DropIn from "braintree-web-drop-in-react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 export default function CartPage() {
   const [cart, setCart] = useCart();
   const [auth, setAuth] = useAuth();
+  const [clientToken, setClientToken] = useState();
 
   const navigate = useNavigate();
 
@@ -27,6 +31,23 @@ export default function CartPage() {
   };
 
   let total = getTotal(cart);
+
+  const getToken = async () => {
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_REACT_APP_API}/api/products/client-token`
+      );
+      console.log(data);
+      setClientToken(data?.clientToken);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, [auth?.token]);
+
   return (
     <Layout title="Cart">
       <div className="grid  grid-cols-4 grid-rows-1 w-full min-h-screen justify-items-center ">
@@ -78,9 +99,9 @@ export default function CartPage() {
                 <h1> Current Address : {auth.user.address} </h1>
               </div>
               {total > 0 ? (
-                <div className="checkout">Payment Gateway here</div>
+                <div className="checkout"></div>
               ) : (
-                ""
+                <p> Your Cart is Empty</p>
               )}
             </>
           ) : (
