@@ -9,7 +9,8 @@ import axios from "axios";
 export default function CartPage() {
   const [cart, setCart] = useCart();
   const [auth, setAuth] = useAuth();
-  const [clientToken, setClientToken] = useState();
+  const [clientToken, setClientToken] = useState("");
+  const [instance, setInstance] = useState("");
 
   const navigate = useNavigate();
 
