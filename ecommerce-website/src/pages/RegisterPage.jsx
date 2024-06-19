@@ -18,14 +18,17 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8000/api/auth/register", {
-        name,
-        email,
-        pass,
-        phone,
-        address,
-        answer,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_REACT_APP_API}/api/auth/register`,
+        {
+          name,
+          email,
+          pass,
+          phone,
+          address,
+          answer,
+        }
+      );
       if (res.data.success) {
         toast.success(res.data.message);
         navigate("/login");

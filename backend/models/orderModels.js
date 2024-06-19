@@ -1,18 +1,19 @@
 import mongoose from "mongoose";
-import Product from "./productModel";
+import Product from "./productModel.js";
+import User from "./userModels.js";
 
 const orderSchema = new mongoose.Schema(
   {
     products: [
       {
-        type: mongoose.ObjectID,
-        ref: Product,
+        type: mongoose.ObjectId,
+        ref: "Product",
       },
     ],
     payment: {},
     buyer: {
-      type: mongoose.ObjectID,
-      ref: User,
+      type: mongoose.ObjectId,
+      ref: "User",
     },
     status: {
       type: String,

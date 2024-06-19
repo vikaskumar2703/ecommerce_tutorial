@@ -4,6 +4,7 @@ import useAuth from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 import DropIn from "braintree-web-drop-in-react";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import axios from "axios";
 
 export default function CartPage() {
@@ -55,9 +56,15 @@ export default function CartPage() {
       const { nonce } = await instance.requestPaymentMethod();
       const { data } = await axios.post(
         `${import.meta.env.VITE_REACT_APP_API}/api/products/checkout`,
-        { cart, nonce }
+        { nonce, cart }
       );
       setLoading(false);
+      if (data.ok) {
+        toast.success("Payment Successfull");
+        navigate("/");
+        localStorage.removeItem("cart");
+        setCart([]);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -113,15 +120,17 @@ export default function CartPage() {
               <div>
                 <h1> Current Address : {auth.user.address} </h1>
               </div>
-              {total > 0 ? (
-                <div className="checkout flex items-center flex-col w-96 ">
+              {total > 0 && clientToken ? (
+                <div className="checkout w-96 flex flex-col items-center ">
                   <DropIn
                     options={{ authorization: clientToken }}
                     onInstance={(instance) => setInstance(instance)}
+                    onError={(err) => console.log(err)}
                   />
                   <button
-                    disabled={loading}
+                    disabled={loading || !instance || !auth.user.address}
                     className="py-2 px-4 bg-purple-500 rounded-xl "
+                    onClick={makeTransaction}
                   >
                     Make Payment
                   </button>

@@ -16,7 +16,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/auth/forgot-password",
+        `${import.meta.env.VITE_REACT_APP_API}/api/auth/forgot-password`,
         {
           email,
           answer,

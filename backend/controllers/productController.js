@@ -3,6 +3,7 @@ import slugify from "slugify";
 import fs from "fs";
 import braintree from "braintree";
 import dotenv from "dotenv";
+import Order from "../models/orderModels.js";
 
 dotenv.config();
 
@@ -280,7 +281,7 @@ export const braintreePaymentController = async (req, res) => {
       },
       (err, result) => {
         if (result) {
-          const cart = new Order({
+          const order = new Order({
             products: cart,
             payment: result,
             buyer: req.user._id,
