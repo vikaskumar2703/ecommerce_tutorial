@@ -11,6 +11,7 @@ export default function CartPage() {
   const [auth, setAuth] = useAuth();
   const [clientToken, setClientToken] = useState("");
   const [instance, setInstance] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -38,7 +39,6 @@ export default function CartPage() {
       const { data } = await axios.get(
         `${import.meta.env.VITE_REACT_APP_API}/api/products/client-token`
       );
-      console.log(data);
       setClientToken(data?.clientToken);
     } catch (error) {
       console.log(error);
@@ -48,6 +48,20 @@ export default function CartPage() {
   useEffect(() => {
     getToken();
   }, [auth?.token]);
+
+  const makeTransaction = async () => {
+    try {
+      setLoading(true);
+      const { nonce } = await instance.requestPaymentMethod();
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_REACT_APP_API}/api/products/checkout`,
+        { cart, nonce }
+      );
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Layout title="Cart">
@@ -100,7 +114,18 @@ export default function CartPage() {
                 <h1> Current Address : {auth.user.address} </h1>
               </div>
               {total > 0 ? (
-                <div className="checkout"></div>
+                <div className="checkout flex items-center flex-col w-96 ">
+                  <DropIn
+                    options={{ authorization: clientToken }}
+                    onInstance={(instance) => setInstance(instance)}
+                  />
+                  <button
+                    disabled={loading}
+                    className="py-2 px-4 bg-purple-500 rounded-xl "
+                  >
+                    Make Payment
+                  </button>
+                </div>
               ) : (
                 <p> Your Cart is Empty</p>
               )}
