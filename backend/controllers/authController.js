@@ -1,6 +1,8 @@
 import User from "../models/userModels.js";
 import jwt from "jsonwebtoken";
 import { hashPassword, comparePassword } from "../utils/authUtils.js";
+import Order from "../models/orderModels.js";
+import OrdersPage from "../../ecommerce-website/src/pages/admin_pages/OrdersPage.jsx";
 
 //@desc Register a user
 //@route POST /api/v1/auth/register
@@ -70,6 +72,7 @@ export const loginController = async (req, res) => {
       const token = jwt.sign(
         {
           username: user.name,
+          _id: user._id,
           email: user.email,
         },
         process.env.ACCESS_TOKEN_SECRET,
@@ -135,4 +138,20 @@ export const testController = async (req, res) => {
     message:
       "Token validated successfully + Protected Route can be accessed by admin with token",
   });
+};
+
+// @desc get order controller
+// @route GET /api/auth/orders
+// @access private - user only
+
+export const getOrdersController = async (req, res) => {
+  try {
+    const orders = await Orders.find({ buyer: req.user._id })
+      .populate("products", "-photo")
+      .populate("buyer", "name");
+
+    res.json("orders");
+  } catch (error) {
+    console.log(error);
+  }
 };

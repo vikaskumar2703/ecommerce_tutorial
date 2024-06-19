@@ -71,7 +71,7 @@ function App() {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route component={<ErrorPage />} />
               </Routes>
-              <ToastContainer />
+              <ToastContainer position="top-center" autoClose={500} />
             </div>
           </Router>
         </CartContextProvider>
