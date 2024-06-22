@@ -12,16 +12,13 @@ export default function UserDashboardPage() {
         </div>
         <div className="col-span-3 text-center p-5 flex flex-col items-center">
           <h1 className="text-4xl m-10 font-bold rounded-md underline">
-            User Details
+            User Profile
           </h1>
-          <div className="border-2 max-w-fit px-10 py-5 space-y-4 text-start">
-            <h2 className="text-2xl"> Name : {auth?.user?.name}</h2>
-            <h2 className="text-2xl"> Email : {auth?.user?.email}</h2>
-            <h2 className="text-2xl"> Phone : {auth?.user?.phone}</h2>
-            <h2 className="text-2xl">
-              {" "}
-              Assigned Mentor : {auth?.user?.mentor}
-            </h2>
+          <div className="border text-left p-4 space-y-2 text-xl">
+            <p>Name : {auth.user.name}</p>
+            <p>Email : {auth.user.email} </p>
+            <p>Phone : {auth.user.phone}</p>
+            <p>Address : {auth.user.address}</p>
           </div>
         </div>
       </div>

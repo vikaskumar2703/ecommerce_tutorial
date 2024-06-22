@@ -210,3 +210,47 @@ export const updateStatusController = async (req, res) => {
     });
   }
 };
+
+//@desc Update user profile
+//@route PUT /api/v1/auth/update
+//@access private
+export const updateController = async (req, res) => {
+  try {
+    const { name, email, pass, phone, address } = req.body;
+
+    // Validate fields in user input
+    if (!name || !email || !pass || !phone || !address) {
+      return res.send({ message: "All fields are mandatory!" });
+    }
+    // Check for an existing user
+
+    const hashedPassword = await hashPassword(pass);
+    const user = await User.findByIdAndUpdate(req.user._id, {
+      name,
+      email,
+      password: hashedPassword,
+      phone,
+      address,
+    });
+    if (user) {
+      return res.status(201).send({
+        success: true,
+        message: "User updated successfully",
+        user,
+      });
+    } else {
+      return res.status(400).send({
+        success: true,
+        message: "User registered successfully",
+        user,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: " Error in registration",
+      error,
+    });
+  }
+};
