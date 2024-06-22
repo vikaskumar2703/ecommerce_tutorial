@@ -2,7 +2,6 @@ import User from "../models/userModels.js";
 import jwt from "jsonwebtoken";
 import { hashPassword, comparePassword } from "../utils/authUtils.js";
 import Order from "../models/orderModels.js";
-import OrdersPage from "../../ecommerce-website/src/pages/admin_pages/OrdersPage.jsx";
 
 //@desc Register a user
 //@route POST /api/v1/auth/register
@@ -146,12 +145,38 @@ export const testController = async (req, res) => {
 
 export const getOrdersController = async (req, res) => {
   try {
-    const orders = await Orders.find({ buyer: req.user._id })
+    const orders = await Order.find({ buyer: req.user._id })
       .populate("products", "-photo")
       .populate("buyer", "name");
 
-    res.json("orders");
+    res.json(orders);
   } catch (error) {
     console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while getting orders",
+      error,
+    });
+  }
+};
+
+// @desc get all orders controller
+// @route GET /api/auth/all-orders
+// @access private - admin only
+
+export const getAllOrdersController = async (req, res) => {
+  try {
+    const orders = await Order.find({})
+      .populate("products", "-photo")
+      .populate("buyer", "name");
+
+    res.json(orders);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while getting all orders orders",
+      error,
+    });
   }
 };
