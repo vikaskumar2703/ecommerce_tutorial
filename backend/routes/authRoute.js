@@ -6,6 +6,7 @@ import {
   forgotPasswordController,
   getOrdersController,
   getAllOrdersController,
+  updateStatusController,
 } from "../controllers/authController.js";
 import { isAdmin, validateToken } from "../middleware/authMiddleware.js";
 //Create a router object ; It provides a way to group related routes together and define middleware for those routes separately
@@ -28,5 +29,12 @@ router.get("/admin-auth", validateToken, isAdmin, (req, res) => {
 router.get("/orders", validateToken, getOrdersController);
 
 router.get("/get-orders", validateToken, isAdmin, getAllOrdersController);
+
+router.put(
+  "/order-status/:orderId",
+  validateToken,
+  isAdmin,
+  updateStatusController
+);
 
 export default router;

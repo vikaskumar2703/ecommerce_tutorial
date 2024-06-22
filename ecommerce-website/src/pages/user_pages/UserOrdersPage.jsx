@@ -53,7 +53,7 @@ export default function UserOrdersPage() {
                       <td>{i + 1}</td>
                       <td>{o.status}</td>
                       <td>{o.buyer.name}</td>
-                      <td></td>
+                      <td>{moment(o?.createAt).fromNow()}</td>
                       <td>{o.payment.success ? "Success" : "Pending"}</td>
                       <td>{o.products.length}</td>
                     </tr>

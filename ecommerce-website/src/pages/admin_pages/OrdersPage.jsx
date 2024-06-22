@@ -4,10 +4,19 @@ import axios from "axios";
 import useAuth from "../../contexts/authContext";
 import { useState, useEffect } from "react";
 import { Select } from "antd";
+import { toast } from "react-toastify";
+import moment from "moment";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState();
   const [auth, setAuth] = useAuth();
+  const [status, setStatus] = useState([
+    "Not Processed",
+    "Shipping",
+    "Delivered",
+    "Cancel",
+  ]);
+  const [changeStatus, setChangeStatus] = useState();
 
   const getOrders = async () => {
     try {
@@ -24,6 +33,23 @@ export default function OrdersPage() {
     if (auth?.token) getOrders();
   }, [auth?.token]);
 
+  const handleChange = async (orderId, value) => {
+    try {
+      const { data } = await axios.put(
+        `${
+          import.meta.env.VITE_REACT_APP_API
+        }/api/auth/order-status/${orderId}`,
+        { status: value }
+      );
+      if (data?.success) {
+        setStatus(data?.order?.status);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
   return (
     <Layout title="Create Products">
       <div className="grid grid-cols-4 grid-rows-1 w-full min-h-screen">
@@ -36,7 +62,7 @@ export default function OrdersPage() {
           </h1>
           {orders?.map((o, i) => {
             return (
-              <div className="border w-full my-4 " key={o._id}>
+              <div className="border w-full my-4 " key={o?._id}>
                 <table className="table-auto w-full">
                   <thead>
                     <tr className="border border-collapse h-10">
@@ -52,12 +78,22 @@ export default function OrdersPage() {
                     <tr className="h-10">
                       <td>{i + 1}</td>
                       <td>
-                        <Select size="small"></Select>
+                        <Select
+                          size="small"
+                          defaultValue={o?.status}
+                          onChange={(value) => handleChange(o?._id, value)}
+                        >
+                          {status.map((s, i) => (
+                            <Select.Option key={i} value={s}>
+                              {s.name}
+                            </Select.Option>
+                          ))}
+                        </Select>
                       </td>
-                      <td>{o.buyer.name}</td>
-                      <td></td>
-                      <td>{o.payment.success ? "Success" : "Pending"}</td>
-                      <td>{o.products.length}</td>
+                      <td>{o?.buyer.name}</td>
+                      <td>{moment(o?.createAt).fromNow()}</td>
+                      <td>{o?.payment.success ? "Success" : "Pending"}</td>
+                      <td>{o?.products.length}</td>
                     </tr>
                   </tbody>
                 </table>

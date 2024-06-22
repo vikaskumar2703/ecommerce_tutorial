@@ -180,3 +180,33 @@ export const getAllOrdersController = async (req, res) => {
     });
   }
 };
+
+// @desc update orders status controller
+// @route PUT  /api/auth/order-status
+// @access private - admin only
+
+export const updateStatusController = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const order = await Order.findByIdAndUpdate(
+      { _id: req.params.orderId },
+      { status: status },
+      { new: true }
+    )
+      .populate("products", "-photo")
+      .populate("buyer", "name");
+
+    res.status(201).send({
+      sucess: true,
+      message: "Order status updated successfully",
+      order,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while getting all orders orders",
+      error,
+    });
+  }
+};
