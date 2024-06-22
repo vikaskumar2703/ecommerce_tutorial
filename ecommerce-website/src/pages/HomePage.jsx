@@ -106,7 +106,6 @@ export default function HomePage() {
           </button>
         </div>
         <div className="col-span-3 text-center p-5 flex flex-col items-center">
-          {JSON.stringify(checked, null, 4)}
           <h1 className="text-4xl m-10 font-bold rounded-md"> All Products</h1>
           <div className="grid grid-cols-3 ">
             {products.map((p) => (
