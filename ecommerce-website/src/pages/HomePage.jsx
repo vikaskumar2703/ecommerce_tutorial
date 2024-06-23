@@ -123,22 +123,21 @@ export default function HomePage() {
           </button>
         </div>
         <div className="col-span-3 text-center p-5 flex flex-col items-center">
-          <p>{JSON.stringify(radio, null, 4)}</p>
           <h1 className="text-4xl m-10 font-bold rounded-md"> All Products</h1>
-          <div className="grid grid-cols-3 ">
+          <div className="grid grid-cols-3 gap-4 ">
             {products.map((p) => (
               // <Link to={`/dashboard/admin/products/${p.slug}`}>
-              <div className="border" key={p._id}>
+              <div className="border p-4" key={p._id}>
                 <img
                   src={`${
                     import.meta.env.VITE_REACT_APP_API
                   }/api/products/product-photo/${p._id}`}
-                  className="min-h-[200px]"
+                  className="h-[200px]"
                   alt="product-photo"
                 />
                 <div className="flex flex-col items-start m-2">
                   <h1 className="font-bold text-lg">{p.name}</h1>
-                  <p>{p.description}</p>
+                  <p>{p.description.substring(0, 30)}</p>
                   <p>${p.price}</p>
                   <div className="w-full flex justify-start m-2">
                     <button

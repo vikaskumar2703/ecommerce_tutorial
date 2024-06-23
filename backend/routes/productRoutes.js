@@ -59,4 +59,7 @@ router.get("/client-token", validateToken, braintreeTokenController);
 
 router.post("/checkout", validateToken, braintreePaymentController);
 
+// total products count
+router.get("/product-count", productCountController);
+
 export default router;
