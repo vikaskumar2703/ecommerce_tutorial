@@ -174,10 +174,13 @@ export const updateProductController = async (req, res) => {
 // filter products
 export const filterProductController = async (req, res) => {
   try {
-    const { checked } = req.body;
+    const { checked, radio } = req.body;
     let args = {};
     if (checked.length) {
       args.category = checked;
+    }
+    if (radio.length) {
+      args.price = { $gte: radio[0], $lte: radio[1] };
     }
     const products = await Product.find(args);
     res.status(201).send({

@@ -1,17 +1,21 @@
 import Layout from "../components/layout/Layout";
-import { Checkbox } from "antd";
+import { Checkbox, Radio } from "antd";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import useCart from "../contexts/cartContext";
+import { Prices } from "../components/Prices";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
   const [cart, setCart] = useCart();
+  const [radio, setRadio] = useState([]);
+
   const navigate = useNavigate();
+
   //get all products
   const getAllProducts = async () => {
     try {
@@ -30,8 +34,8 @@ export default function HomePage() {
     }
   };
   useEffect(() => {
-    if (!checked.length) getAllProducts();
-  }, [checked.length]);
+    if (!checked.length || !radio.length) getAllProducts();
+  }, [checked.length, radio.length]);
 
   // get all categories
   const getAllCategories = async () => {
@@ -69,7 +73,7 @@ export default function HomePage() {
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_REACT_APP_API}/api/products/product-filters`,
-        { checked }
+        { checked, radio }
       );
       setProducts(data?.products);
     } catch (error) {
@@ -78,15 +82,16 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    if (checked.length) filterProduct();
-  }, [checked]);
+    if (checked.length || radio.length) filterProduct();
+  }, [checked, radio]);
 
   return (
     <Layout title="Ecommerce Site">
       <div className="grid grid-cols-4 grid-rows-1 w-full min-h-screen">
         <div className="text-center border">
-          <h1 className="m-2 font-bold text-xl">Filters</h1>
+          <h1 className="m-2 font-bold text-xl">Filter By Category</h1>
           <div className="m-4 flex flex-col">
+            {" "}
             {categories.map((c) => (
               <Checkbox
                 key={c._id}
@@ -95,6 +100,18 @@ export default function HomePage() {
                 {c.name}
               </Checkbox>
             ))}
+          </div>
+          {/* Filter by price */}
+          <h1 className="m-2 font-bold text-xl">Filter By Price</h1>
+          <div className="m-4 flex flex-col">
+            {" "}
+            <Radio.Group onChange={(e) => setRadio(e.target.value)}>
+              {Prices.map((p) => (
+                <div key={p._id}>
+                  <Radio value={p.array}>{p.name}</Radio>
+                </div>
+              ))}
+            </Radio.Group>
           </div>
           <button
             className="bg-red-600 p-2 text-white m-2 rounded"
@@ -106,6 +123,7 @@ export default function HomePage() {
           </button>
         </div>
         <div className="col-span-3 text-center p-5 flex flex-col items-center">
+          <p>{JSON.stringify(radio, null, 4)}</p>
           <h1 className="text-4xl m-10 font-bold rounded-md"> All Products</h1>
           <div className="grid grid-cols-3 ">
             {products.map((p) => (
