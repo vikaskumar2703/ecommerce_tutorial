@@ -225,13 +225,17 @@ export const updateController = async (req, res) => {
     // Check for an existing user
 
     const hashedPassword = await hashPassword(pass);
-    const user = await User.findByIdAndUpdate(req.user._id, {
-      name,
-      email,
-      password: hashedPassword,
-      phone,
-      address,
-    });
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        name,
+        email,
+        password: hashedPassword,
+        phone,
+        address,
+      },
+      { new: true }
+    );
     if (user) {
       return res.status(201).send({
         success: true,

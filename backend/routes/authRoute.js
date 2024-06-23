@@ -17,7 +17,7 @@ router.post("/register", registerController);
 
 router.post("/login", loginController);
 
-router.put("/update", updateController);
+router.put("/update", validateToken, updateController);
 
 router.post("/forgot-password", forgotPasswordController);
 
