@@ -7,7 +7,9 @@ import {
   deleteProductController,
   filterProductController,
   getProductController,
+  getProductListController,
   getSingleProductController,
+  productCountController,
   productPhotoController,
   searchProductController,
   similarProductController,
@@ -61,5 +63,8 @@ router.post("/checkout", validateToken, braintreePaymentController);
 
 // total products count
 router.get("/product-count", productCountController);
+
+// get list of products
+router.get("/product-list/:page", getProductListController);
 
 export default router;

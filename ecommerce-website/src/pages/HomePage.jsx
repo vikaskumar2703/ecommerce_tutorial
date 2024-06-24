@@ -13,21 +13,23 @@ export default function HomePage() {
   const [checked, setChecked] = useState([]);
   const [cart, setCart] = useCart();
   const [radio, setRadio] = useState([]);
+  const [total, setTotal] = useState();
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   //get all products
   const getAllProducts = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(
-        `${import.meta.env.VITE_REACT_APP_API}/api/products/get-product`
+        `${
+          import.meta.env.VITE_REACT_APP_API
+        }/api/products/product-list/${page}`
       );
-      if (data.success) {
-        setProducts(data.products);
-        toast.success(data.message);
-      } else {
-        toast.error(res.data.message);
-      }
+      setLoading(false);
+      setProducts(data?.products);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -56,7 +58,43 @@ export default function HomePage() {
   };
   useEffect(() => {
     getAllCategories();
+    getTotal();
   }, []);
+
+  // get total products count
+  const getTotal = async () => {
+    try {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_REACT_APP_API}/api/products/product-count`
+      );
+      setTotal(data?.total);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Loadmore products function
+  const loadMore = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        `${
+          import.meta.env.VITE_REACT_APP_API
+        }/api/products/product-list/${page}`
+      );
+      setLoading(false);
+      setProducts([...products, ...data?.products]);
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (page === 1) return;
+    loadMore();
+  }, [page]);
 
   // filter by category
   const handleFilter = (value, id) => {
@@ -166,6 +204,19 @@ export default function HomePage() {
               </div>
               // </Link>
             ))}
+          </div>
+          <div>
+            {products && products.length < total && (
+              <button
+                className="btn -loadmore bg-blue-500 rounded-2xl"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage((prev) => prev + 1);
+                }}
+              >
+                {loading ? "Loading..." : "LoadMore"}
+              </button>
+            )}
           </div>
         </div>
       </div>

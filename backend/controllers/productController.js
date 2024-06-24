@@ -303,3 +303,43 @@ export const braintreePaymentController = async (req, res) => {
     });
   }
 };
+
+// productCountController
+export const productCountController = async (req, res) => {
+  try {
+    const total = await Product.find({}).estimatedDocumentCount();
+    res.json({ total });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: true,
+      message: "Error in getting total count",
+      error,
+    });
+  }
+};
+
+// get list of product controller
+export const getProductListController = async (req, res) => {
+  try {
+    const perPage = 2;
+    const page = req.params.page ? req.params.page : 1;
+    const products = await Product.find({})
+      .select("-photo")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ createdAt: -1 });
+    res.status(201).send({
+      success: true,
+      message: "Product listed successfully",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: true,
+      message: "Error in getting list of product",
+      error,
+    });
+  }
+};
