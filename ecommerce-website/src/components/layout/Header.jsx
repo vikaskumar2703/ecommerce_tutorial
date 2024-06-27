@@ -35,7 +35,7 @@ export default function Header() {
             <NavLink to="/cart">Cart ({cart.length})</NavLink>
           </li>
           <li>
-            <NavLink to="/about">About</NavLink>
+            <NavLink to="/category">Category</NavLink>
           </li>
           {!auth.user ? (
             <>

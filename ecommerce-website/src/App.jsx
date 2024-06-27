@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import ErrorPage from "./pages/ErrorPage";
-import AboutPage from "./pages/AboutPage";
 import AdminPage from "./pages/AdminPage";
 import CartPage from "./pages/CartPage";
 import LoginPage from "./pages/LoginPage";
@@ -25,6 +24,8 @@ import SearchPage from "./pages/SearchPage";
 import { SearchContextProvider } from "./contexts/searchContext";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import { CartContextProvider } from "./contexts/cartContext";
+import CategoryPage from "./pages/CategoryPage";
+import CategoryProductPage from "./pages/CategoryProductPage";
 
 function App() {
   return (
@@ -35,7 +36,11 @@ function App() {
             <div>
               <Routes>
                 <Route exact path="/" element={<HomePage />} />
-                <Route path="/about" element={<AboutPage />} />
+                <Route path="/category" element={<CategoryPage />}></Route>
+                <Route
+                  path="/category/:slug"
+                  element={<CategoryProductPage />}
+                />
                 <Route path="/search" element={<SearchPage />} />
                 <Route path="/product/:slug" element={<ProductDetailsPage />} />
                 <Route path="/dashboard" element={<PrivateRoutes />}>
