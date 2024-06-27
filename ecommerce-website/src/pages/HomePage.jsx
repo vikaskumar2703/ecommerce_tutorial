@@ -162,9 +162,10 @@ export default function HomePage() {
         </div>
         <div className="col-span-3 text-center p-5 flex flex-col items-center">
           <h1 className="text-4xl m-10 font-bold rounded-md"> All Products</h1>
+          {/* Products Grid */}
           <div className="grid grid-cols-3 gap-4 ">
             {products.map((p) => (
-              // <Link to={`/dashboard/admin/products/${p.slug}`}>
+              // Product Card
               <div className="border p-4" key={p._id}>
                 <img
                   src={`${

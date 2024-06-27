@@ -6,6 +6,7 @@ import {
   createProductController,
   deleteProductController,
   filterProductController,
+  getCategoryProductController,
   getProductController,
   getProductListController,
   getSingleProductController,
@@ -66,5 +67,8 @@ router.get("/product-count", productCountController);
 
 // get list of products
 router.get("/product-list/:page", getProductListController);
+
+// get category product
+router.get("/category-products/:catSlug", getCategoryProductController);
 
 export default router;

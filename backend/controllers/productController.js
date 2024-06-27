@@ -1,9 +1,10 @@
 import Product from "../models/productModel.js";
+import Category from "../models/categoryModels.js";
+import Order from "../models/orderModels.js";
 import slugify from "slugify";
 import fs from "fs";
 import braintree from "braintree";
 import dotenv from "dotenv";
-import Order from "../models/orderModels.js";
 
 dotenv.config();
 
@@ -329,6 +330,32 @@ export const getProductListController = async (req, res) => {
       .skip((page - 1) * perPage)
       .limit(perPage)
       .sort({ createdAt: -1 });
+    res.status(201).send({
+      success: true,
+      message: "Product listed successfully",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: true,
+      message: "Error in getting list of product",
+      error,
+    });
+  }
+};
+
+// get category product controller
+export const getCategoryProductController = async (req, res) => {
+  try {
+    const { catSlug } = req.params;
+
+    const category = await Category.findOne({ slug: catSlug });
+
+    const products = await Product.find({ category: category._id })
+      .select("-photo")
+      .sort({ createdAt: -1 });
+
     res.status(201).send({
       success: true,
       message: "Product listed successfully",
